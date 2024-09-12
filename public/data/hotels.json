@@ -1,0 +1,189 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Palace Hotel",
+    "location": "New York, USA",
+    "rating": 4.5,
+    "images": [
+      "https://example.com/images/grand-palace-hotel.jpg",
+      "https://example.com/images/grand-palace-hotel-2.jpg",
+      "https://example.com/images/grand-palace-hotel-3.jpg"
+    ],
+    "roomTypes": [
+      {
+        "id": 1,
+        "type": "Superior",
+        "price": 150.0,
+        "availability": 5,
+        "images": ["https://example.com/images/superior-room.jpg", "https://example.com/images/superior-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 2, "name": "Breakfast Included" }
+        ]
+      },
+      {
+        "id": 2,
+        "type": "Deluxe",
+        "price": 200.0,
+        "availability": 3,
+        "images": ["https://example.com/images/deluxe-room.jpg", "https://example.com/images/deluxe-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 3, "name": "Pool Access" },
+          { "id": 4, "name": "Sea View" }
+        ]
+      }
+    ],
+    "amenities": [
+      { "id": 1, "name": "Free Wi-Fi" },
+      { "id": 2, "name": "Breakfast Included" },
+      { "id": 5, "name": "Gym Access" }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Grand View Resort",
+    "location": "California, USA",
+    "rating": 4.7,
+    "images": ["https://example.com/images/ocean-view-resort.jpg", "https://example.com/images/ocean-view-resort-2.jpg"],
+    "roomTypes": [
+      {
+        "id": 3,
+        "type": "Suite",
+        "price": 300.0,
+        "availability": 2,
+        "images": ["https://example.com/images/suite-room.jpg", "https://example.com/images/suite-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 6, "name": "Private Beach" },
+          { "id": 7, "name": "Jacuzzi" }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "Superior",
+        "price": 180.0,
+        "availability": 4,
+        "images": ["https://example.com/images/superior-room.jpg", "https://example.com/images/superior-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 2, "name": "Breakfast Included" }
+        ]
+      }
+    ],
+    "amenities": [
+      { "id": 1, "name": "Free Wi-Fi" },
+      { "id": 6, "name": "Private Beach" },
+      { "id": 7, "name": "Jacuzzi" }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Mountain Lodge",
+    "location": "Aspen, USA",
+    "rating": 4.3,
+    "images": ["https://example.com/images/mountain-lodge.jpg", "https://example.com/images/mountain-lodge-2.jpg"],
+    "roomTypes": [
+      {
+        "id": 5,
+        "type": "Deluxe",
+        "price": 250.0,
+        "availability": 2,
+        "images": ["https://example.com/images/deluxe-room.jpg", "https://example.com/images/deluxe-room-2.jpg"],
+        "amenities": [
+          { "id": 8, "name": "Mountain View" },
+          { "id": 9, "name": "Fireplace" }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "Standard",
+        "price": 120.0,
+        "availability": 6,
+        "images": ["https://example.com/images/standard-room.jpg", "https://example.com/images/standard-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 10, "name": "Complimentary Snacks" }
+        ]
+      }
+    ],
+    "amenities": [
+      { "id": 1, "name": "Free Wi-Fi" },
+      { "id": 8, "name": "Mountain View" },
+      { "id": 9, "name": "Fireplace" }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "City Center Hotel",
+    "location": "Chicago, USA",
+    "rating": 4.0,
+    "images": ["https://example.com/images/city-center-hotel.jpg", "https://example.com/images/city-center-hotel-2.jpg"],
+    "roomTypes": [
+      {
+        "id": 7,
+        "type": "Standard",
+        "price": 100.0,
+        "availability": 10,
+        "images": ["https://example.com/images/standard-room.jpg", "https://example.com/images/standard-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 11, "name": "City View" }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "Executive",
+        "price": 220.0,
+        "availability": 4,
+        "images": ["https://example.com/images/executive-room.jpg", "https://example.com/images/executive-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 12, "name": "Executive Lounge Access" }
+        ]
+      }
+    ],
+    "amenities": [
+      { "id": 1, "name": "Free Wi-Fi" },
+      { "id": 13, "name": "Conference Room" },
+      { "id": 14, "name": "Business Center" }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Beachside Inn",
+    "location": "Miami, USA",
+    "rating": 4.6,
+    "images": ["https://example.com/images/beachside-inn.jpg", "https://example.com/images/beachside-inn-2.jpg"],
+    "roomTypes": [
+      {
+        "id": 9,
+        "type": "Suite",
+        "price": 350.0,
+        "availability": 1,
+        "images": ["https://example.com/images/suite-room.jpg", "https://example.com/images/suite-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 6, "name": "Private Beach" },
+          { "id": 15, "name": "Butler Service" }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "Deluxe",
+        "price": 200.0,
+        "availability": 5,
+        "images": ["https://example.com/images/deluxe-room.jpg", "https://example.com/images/deluxe-room-2.jpg"],
+        "amenities": [
+          { "id": 1, "name": "Free Wi-Fi" },
+          { "id": 3, "name": "Pool Access" }
+        ]
+      }
+    ],
+    "amenities": [
+      { "id": 1, "name": "Free Wi-Fi" },
+      { "id": 6, "name": "Private Beach" },
+      { "id": 3, "name": "Pool Access" }
+    ]
+  }
+]
