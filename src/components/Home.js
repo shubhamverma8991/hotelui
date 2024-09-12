@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import fetchHotels from "../service/hotelService";
 import "../styles/HomePage.css";
 
 const HomePage = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadHotels = async () => {
-      const data = await fetchHotels();
-      setHotels(data);
-    };
-    loadHotels();
-  }, []);
-
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     const value = event.target.value;
     setQuery(value);
     if (value.length > 2) {
-      const filteredHotels = hotels.filter((hotel) => hotel.name.toLowerCase().includes(value.toLowerCase()));
-      setResults(filteredHotels);
+      setLoading(true);
+      const response = await fetch(`http://localhost:8080/api/hotels/search/${value}`);
+      const filteredHotels = await response.json();
+      setLoading(false);
+      console.log(JSON.stringify(filteredHotels));
+      if (filteredHotels?.message === "No hotels found") {
+        setResults([]);
+      } else {
+        setResults(filteredHotels.data);
+      }
     } else {
       setResults([]);
     }
   };
 
-  const handleCardClick = (hotelId) => {
+  const handleCardClick = (hotel, hotelId) => {
+    console.log("clicked hotel", hotel);
     navigate(`/hotel/${hotelId}`);
   };
 
@@ -62,16 +62,25 @@ const HomePage = () => {
         </div>
       </form>
       <div className="search-results">
-        {results.map((hotel) => (
-          <div key={hotel.id} className="card" onClick={() => handleCardClick(hotel.id)}>
-            <img src={hotel.image} alt={hotel.name} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{hotel.name}</h3>
-              <p className="card-location">{hotel.location}</p>
-              <p className="card-rating">Rating: {hotel.rating}</p>
-            </div>
+        {loading ? (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p className="no-results">Loading...</p>
           </div>
-        ))}
+        ) : results.length > 0 ? (
+          results.map((hotel) => (
+            <div key={hotel.id} className="card" onClick={() => handleCardClick(hotel, hotel.id)}>
+              <img src={hotel.images[0]} alt={hotel.name} className="card-image" />
+              <div className="card-content">
+                <h3 className="card-title">{hotel.name}</h3>
+                <p className="card-location">{hotel.location}</p>
+                <p className="card-rating">Rating: {hotel.rating}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="no-results">No hotels found. Please try a different search.</p>
+        )}
       </div>
     </div>
   );

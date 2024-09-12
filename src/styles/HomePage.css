@@ -2,6 +2,7 @@
   max-width: 1024px;
   margin: auto;
 }
+
 .search-container {
   max-width: 800px;
   margin: 2rem auto;
@@ -18,6 +19,12 @@
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .search-results {
@@ -35,6 +42,11 @@
   width: calc(30% - 1rem);
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
 }
 
 .card-image {
@@ -61,4 +73,47 @@
 .card-rating {
   font-size: 1rem;
   color: #28a745;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.5rem;
+  height: 70vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 200px); 
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #007bff; 
+  border-radius: 50%;
+  width: 40px; 
+  height: 40px; 
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 426px) {
+  .home_container {
+    padding-left: 10px; 
+    padding-right: 10px; 
+  }
+  .card {
+    width: 100%;
+  }
 }
