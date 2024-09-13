@@ -13,6 +13,7 @@ const UpdateHotel = () => {
   const [roomTypes, setRoomTypes] = useState([]);
   const [noResultsMessage, setNoResultsMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedHotelIds, setSelectedHotelIds] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,15 +58,19 @@ const UpdateHotel = () => {
 
   const updateHotel = async (id) => {
     try {
-      await fetch(`http://localhost:8080/api/hotels/update`, {
+      const response = await fetch(`http://localhost:8080/api/hotels/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id, ...updatedData }),
       });
-      setSelectedHotel(null);
-      handleSearch({ target: { value: searchName } });
+      if (response.ok) {
+        setSelectedHotel(null);
+        handleSearch({ target: { value: searchName } });
+      } else {
+        console.error("Failed to update hotel.");
+      }
     } catch (error) {
       console.error("Error updating hotel:", error);
     }
@@ -82,32 +87,83 @@ const UpdateHotel = () => {
     }
   };
 
+  const bulkDeleteHotels = async () => {
+    if (selectedHotelIds.length > 0) {
+      try {
+        await fetch(`http://localhost:8080/api/hotels/delete/bulk`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(selectedHotelIds),
+        });
+        setSelectedHotelIds([]);
+        handleSearch({ target: { value: searchName } });
+      } catch (error) {
+        console.error("Error deleting hotels in bulk:", error);
+      }
+    }
+  };
+
   const handleUpdateChange = (e) => {
-    setUpdatedData({ ...updatedData, [e.target.name]: e.target.value });
+    setUpdatedData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleRoomChange = (roomIndex, e) => {
-    const updatedRooms = [...updatedData.roomTypes];
-    updatedRooms[roomIndex][e.target.name] = e.target.value;
-    setUpdatedData({ ...updatedData, roomTypes: updatedRooms });
+    setUpdatedData((prevData) => {
+      const updatedRooms = [...prevData.roomTypes];
+      updatedRooms[roomIndex] = {
+        ...updatedRooms[roomIndex],
+        [e.target.name]: e.target.value,
+      };
+      return {
+        ...prevData,
+        roomTypes: updatedRooms,
+      };
+    });
   };
 
   const handleAddRoom = () => {
-    const newRoom = { type: "", price: "", availability: "", images: [], amenities: [] };
-    setUpdatedData({ ...updatedData, roomTypes: [...updatedData.roomTypes, newRoom] });
+    setUpdatedData((prevData) => ({
+      ...prevData,
+      roomTypes: [...prevData.roomTypes, { type: "", price: "", availability: "", images: [], amenities: [] }],
+    }));
   };
 
   const handleAmenityChange = (roomIndex, amenity) => {
-    const updatedRooms = [...updatedData.roomTypes];
-    const amenitiesList = updatedRooms[roomIndex].amenities;
+    setUpdatedData((prevData) => {
+      const updatedRooms = [...prevData.roomTypes];
+      const room = { ...updatedRooms[roomIndex] };
+      if (!room.amenities) {
+        room.amenities = [];
+      }
+      const amenityExists = room.amenities.some((a) => a.id === amenity.id);
+      if (amenityExists) {
+        room.amenities = room.amenities.filter((a) => a.id !== amenity.id);
+      } else {
+        room.amenities = [...room.amenities, { ...amenity }];
+      }
+      updatedRooms[roomIndex] = room;
+      return {
+        ...prevData,
+        roomTypes: updatedRooms,
+      };
+    });
+  };
 
-    if (amenitiesList.some((a) => a.id === amenity.id)) {
-      updatedRooms[roomIndex].amenities = amenitiesList.filter((a) => a.id !== amenity.id);
-    } else {
-      updatedRooms[roomIndex].amenities.push(amenity);
-    }
-
-    setUpdatedData({ ...updatedData, roomTypes: updatedRooms });
+  const handleSelectHotel = (hotel) => {
+    setSelectedHotel(hotel);
+    setUpdatedData({
+      ...hotel,
+      images: hotel.images || [""],
+      roomTypes: hotel.roomTypes.map((room) => ({
+        ...room,
+        amenities: room.amenities || [],
+      })),
+    });
   };
 
   return (
@@ -124,10 +180,17 @@ const UpdateHotel = () => {
       </button>
       {loading && <div className="mt-4 text-blue-500">Loading...</div>}
       {noResultsMessage && <div className="mt-4 text-red-500">{noResultsMessage}</div>}
+
       <ul className="mt-6">
         {hotels.map((hotel) => (
           <li key={hotel.id} className="flex justify-between items-center p-4 bg-gray-100 rounded-lg mb-4 shadow">
-            <div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedHotelIds.includes(hotel.id)}
+                onChange={() => handleSelectHotel(hotel.id)}
+                className="mr-4"
+              />
               {hotel.name} - {hotel.location}
             </div>
             <div className="flex space-x-2">
@@ -151,6 +214,11 @@ const UpdateHotel = () => {
           </li>
         ))}
       </ul>
+      {selectedHotelIds.length > 1 && (
+        <button onClick={bulkDeleteHotels} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mt-4 mb-4">
+          Delete Selected Hotels
+        </button>
+      )}
       {selectedHotel && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">Edit Hotel Details</h3>
@@ -265,7 +333,7 @@ const UpdateHotel = () => {
                     <label key={amenity.id} className="mr-4 mb-2">
                       <input
                         type="checkbox"
-                        checked={room.amenities.some((a) => a.id === amenity.id)}
+                        checked={updatedData.roomTypes[roomIndex]?.amenities.some((a) => a.id === amenity.id) || false}
                         onChange={() => handleAmenityChange(roomIndex, amenity)}
                         className="mr-1"
                       />

@@ -90,15 +90,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 200px); 
+  height: calc(100vh - 200px);
 }
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #007bff; 
+  border-left-color: #007bff;
   border-radius: 50%;
-  width: 40px; 
-  height: 40px; 
+  width: 40px;
+  height: 40px;
   animation: spin 1s linear infinite;
 }
 
@@ -110,8 +110,8 @@
 
 @media (max-width: 426px) {
   .home_container {
-    padding-left: 10px; 
-    padding-right: 10px; 
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .card {
     width: 100%;
