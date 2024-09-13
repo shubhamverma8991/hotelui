@@ -16,7 +16,6 @@ const HomePage = () => {
       const response = await fetch(`http://localhost:8080/api/hotels/search/${value}`);
       const filteredHotels = await response.json();
       setLoading(false);
-      console.log(JSON.stringify(filteredHotels));
       if (filteredHotels?.message === "No hotels found") {
         setResults([]);
       } else {
@@ -28,60 +27,65 @@ const HomePage = () => {
   };
 
   const handleCardClick = (hotel, hotelId) => {
-    console.log("clicked hotel", hotel);
     navigate(`/hotel/${hotelId}`);
   };
 
   return (
-    <div className="home_container">
-      <form className="max-w-md mx-auto mt-4">
-        <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only">
-          Search
-        </label>
-        <div className="relative">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search Hotels..."
-            value={query}
-            onChange={handleSearch}
-            required
-          />
+    <div className="flex flex-col items-center">
+      {/* Hero Section */}
+      <section className="relative w-full bg-cover bg-center flex flex-col mt-4 items-center text-white">
+        <div className="text-center">
+          <h1 className="text-4xl text-black md:text-5xl font-bold mb-4 transition-transform duration-500 hover:scale-105 hover:text-blue-500">
+            Find the Perfect Stay
+          </h1>
+          <p className="text-lg text-black md:text-xl mb-6 transition-transform duration-500 hover:translate-x-1 hover:text-blue-500">
+            Discover amazing hotels worldwide
+          </p>
+
+          <form className="flex justify-center">
+            <input
+              type="search"
+              id="hotel-search"
+              className="w-full max-w-lg p-3 text-gray-900 rounded-full shadow focus:ring focus:ring-blue-500"
+              placeholder="Search Hotels..."
+              value={query}
+              onChange={handleSearch}
+              required
+            />
+          </form>
         </div>
-      </form>
-      <div className="search-results">
-        {loading ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p className="no-results">Loading...</p>
-          </div>
-        ) : results.length > 0 ? (
-          results.map((hotel) => (
-            <div key={hotel.id} className="card" onClick={() => handleCardClick(hotel, hotel.id)}>
-              <img src={hotel.images[0]} alt={hotel.name} className="card-image" />
-              <div className="card-content">
-                <h3 className="card-title">{hotel.name}</h3>
-                <p className="card-location">{hotel.location}</p>
-                <p className="card-rating">Rating: {hotel.rating}</p>
-              </div>
+      </section>
+
+      {/* Search Results Section */}
+      {query && (
+        <div className="w-full max-w-7xl px-4 py-8">
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <div className="loader border-t-4 border-b-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
+              <p className="ml-3">Loading...</p>
             </div>
-          ))
-        ) : (
-          <p className="no-results">No hotels found. Please try a different search.</p>
-        )}
-      </div>
+          ) : results.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {results.map((hotel) => (
+                <div
+                  key={hotel.id}
+                  className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
+                  onClick={() => handleCardClick(hotel, hotel.id)}
+                >
+                  <img src={hotel.images[0]} alt={hotel.name} className="w-full h-40 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold">{hotel.name}</h3>
+                    <p className="text-sm text-gray-600">{hotel.location}</p>
+                    <p className="text-sm font-medium text-gray-700 mt-2">Rating: {hotel.rating}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-600 mt-6">No hotels found. Please try a different search.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

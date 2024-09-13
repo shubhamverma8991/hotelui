@@ -13,8 +13,7 @@ const AddHotel = () => {
   ]);
   const [amenities, setAmenities] = useState([]);
   const [roomTypes, setRoomTypes] = useState([]);
-  const [imageUrls, setImageUrls] = useState([""]);
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,18 +55,32 @@ const AddHotel = () => {
     setHotels(updatedHotels);
   };
 
-  const handleImageUrlChange = (index, event) => {
-    const updatedUrls = [...imageUrls];
-    updatedUrls[index] = event.target.value;
-    setImageUrls(updatedUrls);
+  const handleRemoveRoomFields = (hotelIndex, roomIndex) => {
+    const updatedHotels = [...hotels];
+    updatedHotels[hotelIndex].roomTypes.splice(roomIndex, 1);
+    setHotels(updatedHotels);
   };
 
-  const handleAddImageUrl = () => {
-    setImageUrls([...imageUrls, ""]);
+  const handleImageUrlChange = (hotelIndex, imgIndex, event) => {
+    const updatedHotels = [...hotels];
+    updatedHotels[hotelIndex].images[imgIndex] = event.target.value;
+    setHotels(updatedHotels);
+  };
+
+  const handleAddImageUrl = (hotelIndex) => {
+    const updatedHotels = [...hotels];
+    updatedHotels[hotelIndex].images.push("");
+    setHotels(updatedHotels);
   };
 
   const handleAddHotel = () => {
     setHotels([...hotels, { name: "", location: "", rating: "", images: [""], roomTypes: [] }]);
+  };
+
+  const handleRemoveHotel = (hotelIndex) => {
+    const updatedHotels = [...hotels];
+    updatedHotels.splice(hotelIndex, 1);
+    setHotels(updatedHotels);
   };
 
   const handleSubmit = async (event) => {
@@ -80,12 +93,12 @@ const AddHotel = () => {
     }
     setError("");
 
-    const hotelsWithImages = hotels.map((hotel, index) => ({
+    const hotelsWithImages = hotels.map((hotel) => ({
       id: null,
       name: hotel.name,
       location: hotel.location,
       rating: parseFloat(hotel.rating),
-      images: imageUrls,
+      images: hotel.images.filter((image) => image),
       roomTypes: hotel.roomTypes.map((room) => ({
         id: null,
         type: room.type,
@@ -113,7 +126,6 @@ const AddHotel = () => {
           roomTypes: [],
         },
       ]);
-      setImageUrls([""]);
     } catch (error) {
       console.error("Error adding hotels:", error);
     }
@@ -122,7 +134,7 @@ const AddHotel = () => {
   return (
     <form className="max-w-5xl mx-auto mt-4 p-6 bg-white shadow-lg rounded-lg" onSubmit={handleSubmit}>
       {hotels.map((hotel, hotelIndex) => (
-        <div key={hotelIndex} className="mb-6 p-6 bg-gray-100 border border-gray-300 rounded-lg">
+        <div key={hotelIndex} className="mb-6 p-6 bg-gray-100 border border-gray-300 rounded-lg relative">
           <h3 className="text-lg font-semibold mb-4">Hotel {hotelIndex + 1}</h3>
           <input
             className="w-full p-2 mb-4 border border-gray-300 rounded"
@@ -148,22 +160,22 @@ const AddHotel = () => {
           />
 
           <h4 className="font-semibold mb-2">Image URLs:</h4>
-          {imageUrls.map((url, imgIndex) => (
+          {hotel.images.map((url, imgIndex) => (
             <input
               key={imgIndex}
               className="w-full p-2 mb-4 border border-gray-300 rounded"
               type="text"
               placeholder="Enter Image URL"
               value={url}
-              onChange={(event) => handleImageUrlChange(imgIndex, event)}
+              onChange={(event) => handleImageUrlChange(hotelIndex, imgIndex, event)}
             />
           ))}
-          <button type="button" onClick={handleAddImageUrl} className=" py-2  underline text-blue-500 mb-4">
+          <button type="button" onClick={() => handleAddImageUrl(hotelIndex)} className=" py-2 underline text-blue-500 mb-4">
             Add Another Image URL
           </button>
 
           {hotel.roomTypes.map((room, roomIndex) => (
-            <div key={roomIndex} className="mb-6 p-4 bg-white border border-gray-200 rounded-lg">
+            <div key={roomIndex} className="mb-6 p-4 bg-white border border-gray-200 rounded-lg relative">
               <h4 className="font-semibold mb-4">Room Type {roomIndex + 1}</h4>
               <select
                 name="type"
@@ -230,9 +242,9 @@ const AddHotel = () => {
 
               <div className="mb-4">
                 <h5 className="font-semibold mb-2">Select Amenities:</h5>
-                <div className="flex flex-wrap">
+                <div className="grid grid-cols-2 gap-2">
                   {amenities.map((amenity) => (
-                    <label key={amenity.id} className="mr-4 mb-2">
+                    <label key={amenity.id} className="flex items-center">
                       <input
                         type="checkbox"
                         value={amenity.name}
@@ -257,6 +269,13 @@ const AddHotel = () => {
                   ))}
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={() => handleRemoveRoomFields(hotelIndex, roomIndex)}
+                className="absolute top-0 right-0 mt-2 mr-2 text-2xl  text-black font-extrabold  p-1"
+              >
+                &times;
+              </button>
             </div>
           ))}
           <button
@@ -265,6 +284,13 @@ const AddHotel = () => {
             className="block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-4"
           >
             Add Room Type
+          </button>
+          <button
+            type="button"
+            onClick={() => handleRemoveHotel(hotelIndex)}
+            className="absolute top-0 right-0 mt-2 mr-2 text-2xl  text-black font-extrabold  p-1"
+          >
+            &times;
           </button>
         </div>
       ))}

@@ -59,21 +59,21 @@ button:hover {
 }
 .amenities-section > div {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Change to 3 columns */
-  gap: 10px; /* Add gap between items */
-  flex-wrap: wrap; /* Keep this for responsiveness */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; 
+  flex-wrap: wrap; 
 }
 
-/* Add media query for responsiveness */
+
 @media (max-width: 768px) {
   .amenities-section > div {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    grid-template-columns: repeat(2, 1fr); 
   }
 }
 
 @media (max-width: 480px) {
   .amenities-section > div {
-    grid-template-columns: 1fr; /* 1 column on very small screens */
+    grid-template-columns: 1fr;
   }
 }
 

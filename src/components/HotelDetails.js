@@ -120,7 +120,7 @@ const HotelDetails = () => {
                   key={index}
                   src={image}
                   alt={`Hotel ${index + 1}`}
-                  className="w-full sm:w-1/2 md:w-1/3 h-50 object-cover rounded-lg shadow-md cursor-pointer"
+                  className="w-full sm:w-1/2 md:w-1/4 h-50 object-cover rounded-lg shadow-md cursor-pointer"
                   onClick={() => openModal(image)}
                 />
               ))
