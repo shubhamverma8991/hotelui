@@ -154,15 +154,19 @@ const UpdateHotel = () => {
     });
   };
 
-  const handleSelectHotel = (hotel) => {
-    setSelectedHotel(hotel);
-    setUpdatedData({
-      ...hotel,
-      images: hotel.images || [""],
-      roomTypes: hotel.roomTypes.map((room) => ({
-        ...room,
-        amenities: room.amenities || [],
-      })),
+  const handleSelectHotel = (id) => {
+    setSelectedHotelIds((prevSelectedIds) =>
+      prevSelectedIds.includes(id) ? prevSelectedIds.filter((selectedId) => selectedId !== id) : [...prevSelectedIds, id]
+    );
+  };
+
+  const handleRemoveRoom = (roomIndex) => {
+    setUpdatedData((prevData) => {
+      const updatedRooms = prevData.roomTypes.filter((_, index) => index !== roomIndex);
+      return {
+        ...prevData,
+        roomTypes: updatedRooms,
+      };
     });
   };
 
@@ -264,13 +268,22 @@ const UpdateHotel = () => {
           <button
             type="button"
             onClick={() => setUpdatedData({ ...updatedData, images: [...updatedData.images, ""] })}
-            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+            className="py-2 text-blue-500 underline"
           >
             Add Another Image URL
           </button>
           {updatedData.roomTypes.map((room, roomIndex) => (
             <div key={roomIndex} className="p-4 mt-6 border border-gray-300 rounded">
-              <h4 className="text-lg font-semibold mb-4">Room Type {roomIndex + 1}</h4>
+              <div className="flex justify-between items-center">
+                <h4 className="text-lg font-semibold mb-4">Room Type {roomIndex + 1}</h4>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveRoom(roomIndex)}
+                  className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              </div>
               <select
                 name="type"
                 value={room.type}
@@ -321,7 +334,7 @@ const UpdateHotel = () => {
                   updatedRooms[roomIndex].images.push("");
                   setUpdatedData({ ...updatedData, roomTypes: updatedRooms });
                 }}
-                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                className="py-2 text-blue-500 underline"
               >
                 Add Another Room Image URL
               </button>
@@ -344,12 +357,13 @@ const UpdateHotel = () => {
               </div>
             </div>
           ))}
-          <button type="button" onClick={handleAddRoom} className="mt-6 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+
+          <button type="button" onClick={handleAddRoom} className="mt-6 py-2 text-blue-500 underline">
             Add Room Type
           </button>
           <button
             onClick={() => updateHotel(selectedHotel.id)}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            className="block mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           >
             Update
           </button>

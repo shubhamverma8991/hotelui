@@ -69,7 +69,7 @@ form {
   margin-top: 10px;
 }
 
-button:hover {
+.loginbutton:hover {
   background-color: #39778c;
 }
 
